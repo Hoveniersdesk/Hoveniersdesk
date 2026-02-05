@@ -1,0 +1,966 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.7">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;<br>
+&lt;html lang="nl"&gt;<br>
+&lt;head&gt;<br>
+   &lt;meta charset="UTF-8"&gt;<br>
+   &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;<br>
+   &lt;title&gt;Hoveniersdesk - Klantbeheer voor Hoveniers&lt;/title&gt;<br>
+   &lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;<br>
+   &lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin&gt;<br>
+   &lt;link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&amp;family=Lato:wght@400;700&amp;display=swap" rel="stylesheet"&gt;<br>
+   &lt;script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"&gt;&lt;/script&gt;<br>
+   &lt;style&gt;<br>
+       :root {<br>
+           --groen-donker: #2d5016;<br>
+           --groen-medium: #4a7c2c;<br>
+           --groen-licht: #7ba65d;<br>
+           --groen-accent: #9bc47d;<br>
+           --aarde: #5d4e37;<br>
+           --zand: #f4f1e8;<br>
+           --wit: #fefefe;<br>
+           --schaduw: rgba(45, 80, 22, 0.15);<br>
+       }</p>
+<p class="p1">       * {<br>
+           margin: 0;<br>
+           padding: 0;<br>
+           box-sizing: border-box;<br>
+       }</p>
+<p class="p1">       body {<br>
+           font-family: 'Lato', sans-serif;<br>
+           background: linear-gradient(135deg, var(--zand) 0%, #e8e4d9 100%);<br>
+           color: var(--groen-donker);<br>
+           min-height: 100vh;<br>
+           position: relative;<br>
+           overflow-x: hidden;<br>
+       }</p>
+<p class="p1">       body::before {<br>
+           content: '';<br>
+           position: fixed;<br>
+           top: 0;<br>
+           left: 0;<br>
+           right: 0;<br>
+           bottom: 0;<br>
+           background-image: <br>
+               radial-gradient(circle at 20% 80%, rgba(155, 196, 125, 0.1) 0%, transparent 50%),<br>
+               radial-gradient(circle at 80% 20%, rgba(74, 124, 44, 0.08) 0%, transparent 50%);<br>
+           pointer-events: none;<br>
+           z-index: 0;<br>
+       }</p>
+<p class="p1">       .container {<br>
+           max-width: 1400px;<br>
+           margin: 0 auto;<br>
+           padding: 2rem;<br>
+           position: relative;<br>
+           z-index: 1;<br>
+       }</p>
+<p class="p1">       /* Login scherm styling */<br>
+       .login-container {<br>
+           max-width: 450px;<br>
+           margin: 8rem auto;<br>
+           background: var(--wit);<br>
+           padding: 3rem;<br>
+           border-radius: 16px;<br>
+           box-shadow: 0 8px 32px var(--schaduw);<br>
+       }</p>
+<p class="p1">       .login-container h1 {<br>
+           font-family: 'Merriweather', serif;<br>
+           color: var(--groen-donker);<br>
+           margin-bottom: 0.5rem;<br>
+           text-align: center;<br>
+           font-size: 2.2rem;<br>
+       }</p>
+<p class="p1">       .login-container .subtitle {<br>
+           text-align: center;<br>
+           color: var(--groen-medium);<br>
+           margin-bottom: 2rem;<br>
+           font-size: 1rem;<br>
+       }</p>
+<p class="p1">       .login-form {<br>
+           display: flex;<br>
+           flex-direction: column;<br>
+           gap: 1.25rem;<br>
+       }</p>
+<p class="p1">       .login-form input {<br>
+           padding: 1rem;<br>
+           border: 2px solid #d4cfbf;<br>
+           border-radius: 8px;<br>
+           font-size: 1rem;<br>
+           font-family: 'Lato', sans-serif;<br>
+           transition: all 0.2s;<br>
+           background: var(--zand);<br>
+       }</p>
+<p class="p1">       .login-form input:focus {<br>
+           outline: none;<br>
+           border-color: var(--groen-medium);<br>
+           background: var(--wit);<br>
+           box-shadow: 0 0 0 3px rgba(74, 124, 44, 0.1);<br>
+       }</p>
+<p class="p1">       .login-form button {<br>
+           padding: 1rem;<br>
+           background: var(--groen-medium);<br>
+           color: var(--wit);<br>
+           border: none;<br>
+           border-radius: 8px;<br>
+           font-size: 1.1rem;<br>
+           font-weight: 700;<br>
+           cursor: pointer;<br>
+           transition: all 0.2s;<br>
+           font-family: 'Lato', sans-serif;<br>
+       }</p>
+<p class="p1">       .login-form button:hover {<br>
+           background: var(--groen-donker);<br>
+           transform: translateY(-2px);<br>
+           box-shadow: 0 4px 12px var(--schaduw);<br>
+       }</p>
+<p class="p1">       .login-form button:disabled {<br>
+           background: #ccc;<br>
+           cursor: not-allowed;<br>
+           transform: none;<br>
+       }</p>
+<p class="p1">       .toggle-auth {<br>
+           text-align: center;<br>
+           margin-top: 1.5rem;<br>
+           color: var(--groen-medium);<br>
+       }</p>
+<p class="p1">       .toggle-auth a {<br>
+           color: var(--groen-donker);<br>
+           font-weight: 700;<br>
+           cursor: pointer;<br>
+           text-decoration: none;<br>
+       }</p>
+<p class="p1">       .toggle-auth a:hover {<br>
+           text-decoration: underline;<br>
+       }</p>
+<p class="p1">       .error-message {<br>
+           background: #fee;<br>
+           color: #c33;<br>
+           padding: 1rem;<br>
+           border-radius: 8px;<br>
+           margin-bottom: 1rem;<br>
+           border-left: 4px solid #c33;<br>
+       }</p>
+<p class="p1">       .success-message {<br>
+           background: #efe;<br>
+           color: #3a3;<br>
+           padding: 1rem;<br>
+           border-radius: 8px;<br>
+           margin-bottom: 1rem;<br>
+           border-left: 4px solid #3a3;<br>
+       }</p>
+<p class="p1">       .dashboard {<br>
+           display: grid;<br>
+           grid-template-columns: repeat(4, 1fr);<br>
+           gap: 1.5rem;<br>
+           margin-bottom: 2rem;<br>
+       }</p>
+<p class="p1">       .stat-kaart {<br>
+           background: var(--wit);<br>
+           padding: 1.5rem;<br>
+           border-radius: 12px;<br>
+           box-shadow: 0 4px 16px var(--schaduw);<br>
+           border-top: 4px solid var(--groen-medium);<br>
+           transition: transform 0.2s;<br>
+       }</p>
+<p class="p1">       .stat-kaart:hover {<br>
+           transform: translateY(-4px);<br>
+           box-shadow: 0 8px 24px var(--schaduw);<br>
+       }</p>
+<p class="p1">       .stat-label {<br>
+           font-size: 0.9rem;<br>
+           color: var(--groen-medium);<br>
+           margin-bottom: 0.5rem;<br>
+           font-weight: 700;<br>
+       }</p>
+<p class="p1">       .stat-waarde {<br>
+           font-size: 2rem;<br>
+           font-weight: 900;<br>
+           color: var(--groen-donker);<br>
+           font-family: 'Merriweather', serif;<br>
+       }</p>
+<p class="p1">       header {<br>
+           background: linear-gradient(135deg, var(--groen-donker) 0%, var(--groen-medium) 100%);<br>
+           padding: 2rem 3rem;<br>
+           border-radius: 16px;<br>
+           margin-bottom: 2.5rem;<br>
+           box-shadow: 0 8px 24px var(--schaduw);<br>
+           position: relative;<br>
+           overflow: hidden;<br>
+           display: flex;<br>
+           justify-content: space-between;<br>
+           align-items: center;<br>
+       }</p>
+<p class="p1">       header::after {<br>
+           content: '🌿';<br>
+           position: absolute;<br>
+           right: 2rem;<br>
+           top: 50%;<br>
+           transform: translateY(-50%);<br>
+           font-size: 4rem;<br>
+           opacity: 0.15;<br>
+       }</p>
+<p class="p1">       .header-left h1 {<br>
+           font-family: 'Merriweather', serif;<br>
+           font-size: 2.5rem;<br>
+           color: var(--wit);<br>
+           margin-bottom: 0.5rem;<br>
+           font-weight: 900;<br>
+           letter-spacing: -0.02em;<br>
+       }</p>
+<p class="p1">       .subtitle {<br>
+           color: var(--groen-accent);<br>
+           font-size: 1.1rem;<br>
+           font-weight: 400;<br>
+       }</p>
+<p class="p1">       .logout-btn {<br>
+           background: rgba(255, 255, 255, 0.2);<br>
+           color: var(--wit);<br>
+           border: 2px solid var(--wit);<br>
+           padding: 0.7rem 1.5rem;<br>
+           border-radius: 8px;<br>
+           cursor: pointer;<br>
+           font-weight: 700;<br>
+           transition: all 0.2s;<br>
+           z-index: 10;<br>
+       }</p>
+<p class="p1">       .logout-btn:hover {<br>
+           background: var(--wit);<br>
+           color: var(--groen-donker);<br>
+       }</p>
+<p class="p1">       .main-grid {<br>
+           display: grid;<br>
+           grid-template-columns: 350px 1fr;<br>
+           gap: 2rem;<br>
+           margin-bottom: 2rem;<br>
+       }</p>
+<p class="p1">       .klanten-lijst {<br>
+           background: var(--wit);<br>
+           border-radius: 12px;<br>
+           padding: 1.5rem;<br>
+           box-shadow: 0 4px 16px var(--schaduw);<br>
+           max-height: calc(100vh - 250px);<br>
+           overflow-y: auto;<br>
+       }</p>
+<p class="p1">       .klanten-lijst h2 {<br>
+           font-family: 'Merriweather', serif;<br>
+           font-size: 1.3rem;<br>
+           color: var(--groen-donker);<br>
+           margin-bottom: 1.25rem;<br>
+           display: flex;<br>
+           align-items: center;<br>
+           gap: 0.5rem;<br>
+       }</p>
+<p class="p1">       .klanten-lijst h2::before {<br>
+           content: '🏡';<br>
+           font-size: 1.5rem;<br>
+       }</p>
+<p class="p1">       .zoek-input {<br>
+           width: 100%;<br>
+           padding: 0.75rem 1rem;<br>
+           border: 2px solid var(--groen-licht);<br>
+           border-radius: 8px;<br>
+           font-size: 0.95rem;<br>
+           margin-bottom: 1rem;<br>
+           font-family: 'Lato', sans-serif;<br>
+           transition: all 0.2s;<br>
+       }</p>
+<p class="p1">       .zoek-input:focus {<br>
+           outline: none;<br>
+           border-color: var(--groen-medium);<br>
+           box-shadow: 0 0 0 3px rgba(74, 124, 44, 0.1);<br>
+       }</p>
+<p class="p1">       .klant-item {<br>
+           padding: 1rem;<br>
+           background: var(--zand);<br>
+           border-radius: 8px;<br>
+           margin-bottom: 0.75rem;<br>
+           cursor: pointer;<br>
+           transition: all 0.2s;<br>
+           border-left: 4px solid var(--groen-accent);<br>
+       }</p>
+<p class="p1">       .klant-item:hover {<br>
+           background: var(--wit);<br>
+           box-shadow: 0 2px 8px var(--schaduw);<br>
+           transform: translateX(4px);<br>
+       }</p>
+<p class="p1">       .klant-item.actief {<br>
+           background: var(--groen-licht);<br>
+           color: var(--wit);<br>
+           border-left-color: var(--groen-donker);<br>
+       }</p>
+<p class="p1">       .klant-naam {<br>
+           font-weight: 700;<br>
+           margin-bottom: 0.25rem;<br>
+           font-size: 1rem;<br>
+       }</p>
+<p class="p1">       .klant-info {<br>
+           font-size: 0.85rem;<br>
+           opacity: 0.8;<br>
+       }</p>
+<p class="p1">       .klant-item.actief .klant-info {<br>
+           opacity: 0.95;<br>
+       }</p>
+<p class="p1">       .nieuwe-klant-btn {<br>
+           width: 100%;<br>
+           padding: 1rem;<br>
+           background: var(--groen-medium);<br>
+           color: var(--wit);<br>
+           border: none;<br>
+           border-radius: 8px;<br>
+           font-size: 1rem;<br>
+           font-weight: 700;<br>
+           cursor: pointer;<br>
+           transition: all 0.2s;<br>
+           font-family: 'Lato', sans-serif;<br>
+           margin-top: 1rem;<br>
+       }</p>
+<p class="p1">       .nieuwe-klant-btn:hover {<br>
+           background: var(--groen-donker);<br>
+           transform: translateY(-2px);<br>
+           box-shadow: 0 4px 12px var(--schaduw);<br>
+       }</p>
+<p class="p1">       .klant-detail {<br>
+           background: var(--wit);<br>
+           border-radius: 12px;<br>
+           padding: 2rem;<br>
+           box-shadow: 0 4px 16px var(--schaduw);<br>
+       }</p>
+<p class="p1">       .klant-detail h2 {<br>
+           font-family: 'Merriweather', serif;<br>
+           font-size: 1.8rem;<br>
+           color: var(--groen-donker);<br>
+           margin-bottom: 1.5rem;<br>
+       }</p>
+<p class="p1">       .form-grid {<br>
+           display: grid;<br>
+           grid-template-columns: 1fr 1fr;<br>
+           gap: 1.25rem;<br>
+           margin-bottom: 2rem;<br>
+       }</p>
+<p class="p1">       .form-grid.full {<br>
+           grid-template-columns: 1fr;<br>
+       }</p>
+<p class="p1">       .form-groep {<br>
+           display: flex;<br>
+           flex-direction: column;<br>
+       }</p>
+<p class="p1">       label {<br>
+           font-weight: 700;<br>
+           color: var(--groen-donker);<br>
+           margin-bottom: 0.5rem;<br>
+           font-size: 0.9rem;<br>
+           display: flex;<br>
+           align-items: center;<br>
+           gap: 0.4rem;<br>
+       }</p>
+<p class="p1">       .label-icon {<br>
+           font-size: 1.1rem;<br>
+       }</p>
+<p class="p1">       input, textarea, select {<br>
+           padding: 0.75rem;<br>
+           border: 2px solid #d4cfbf;<br>
+           border-radius: 6px;<br>
+           font-size: 0.95rem;<br>
+           font-family: 'Lato', sans-serif;<br>
+           transition: all 0.2s;<br>
+           background: var(--zand);<br>
+       }</p>
+<p class="p1">       input:focus, textarea:focus, select:focus {<br>
+           outline: none;<br>
+           border-color: var(--groen-medium);<br>
+           background: var(--wit);<br>
+           box-shadow: 0 0 0 3px rgba(74, 124, 44, 0.1);<br>
+       }</p>
+<p class="p1">       textarea {<br>
+           resize: vertical;<br>
+           min-height: 100px;<br>
+       }</p>
+<p class="p1">       .sectie {<br>
+           background: linear-gradient(135deg, var(--zand) 0%, var(--wit) 100%);<br>
+           padding: 1.5rem;<br>
+           border-radius: 10px;<br>
+           margin-bottom: 1.5rem;<br>
+           border: 2px solid var(--groen-accent);<br>
+       }</p>
+<p class="p1">       .sectie h3 {<br>
+           font-family: 'Merriweather', serif;<br>
+           color: var(--groen-medium);<br>
+           margin-bottom: 1rem;<br>
+           font-size: 1.2rem;<br>
+           display: flex;<br>
+           align-items: center;<br>
+           gap: 0.5rem;<br>
+       }</p>
+<p class="p1">       .actie-knoppen {<br>
+           display: flex;<br>
+           gap: 1rem;<br>
+           margin-top: 2rem;<br>
+       }</p>
+<p class="p1">       .btn {<br>
+           padding: 0.9rem 1.8rem;<br>
+           border: none;<br>
+           border-radius: 8px;<br>
+           font-size: 1rem;<br>
+           font-weight: 700;<br>
+           cursor: pointer;<br>
+           transition: all 0.2s;<br>
+           font-family: 'Lato', sans-serif;<br>
+       }</p>
+<p class="p1">       .btn-primair {<br>
+           background: var(--groen-medium);<br>
+           color: var(--wit);<br>
+           flex: 1;<br>
+       }</p>
+<p class="p1">       .btn-primair:hover {<br>
+           background: var(--groen-donker);<br>
+           transform: translateY(-2px);<br>
+           box-shadow: 0 4px 12px var(--schaduw);<br>
+       }</p>
+<p class="p1">       .btn-secundair {<br>
+           background: var(--aarde);<br>
+           color: var(--wit);<br>
+       }</p>
+<p class="p1">       .btn-secundair:hover {<br>
+           background: #4a3f2e;<br>
+           transform: translateY(-2px);<br>
+           box-shadow: 0 4px 12px rgba(93, 78, 55, 0.3);<br>
+       }</p>
+<p class="p1">       .placeholder-text {<br>
+           text-align: center;<br>
+           color: var(--groen-medium);<br>
+           padding: 4rem 2rem;<br>
+           font-size: 1.1rem;<br>
+       }</p>
+<p class="p1">       .placeholder-text::before {<br>
+           content: '🌱';<br>
+           display: block;<br>
+           font-size: 4rem;<br>
+           margin-bottom: 1rem;<br>
+           opacity: 0.5;<br>
+       }</p>
+<p class="p1">       .status-badge {<br>
+           display: inline-block;<br>
+           padding: 0.3rem 0.8rem;<br>
+           border-radius: 20px;<br>
+           font-size: 0.8rem;<br>
+           font-weight: 700;<br>
+           margin-left: 0.5rem;<br>
+       }</p>
+<p class="p1">       .status-actief {<br>
+           background: var(--groen-accent);<br>
+           color: var(--groen-donker);<br>
+       }</p>
+<p class="p1">       .status-inactief {<br>
+           background: #ccc;<br>
+           color: #666;<br>
+       }</p>
+<p class="p1">       .hidden {<br>
+           display: none;<br>
+       }</p>
+<p class="p1">       .loading {<br>
+           text-align: center;<br>
+           padding: 3rem;<br>
+           color: var(--groen-medium);<br>
+           font-size: 1.2rem;<br>
+       }</p>
+<p class="p1">       @media (max-width: 1024px) {<br>
+           .main-grid {<br>
+               grid-template-columns: 1fr;<br>
+           }</p>
+<p class="p1">           .dashboard {<br>
+               grid-template-columns: repeat(2, 1fr);<br>
+           }</p>
+<p class="p1">           .klanten-lijst {<br>
+               max-height: 400px;<br>
+           }<br>
+       }</p>
+<p class="p1">       @media (max-width: 640px) {<br>
+           .dashboard {<br>
+               grid-template-columns: 1fr;<br>
+           }<br>
+       }<br>
+   &lt;/style&gt;<br>
+&lt;/head&gt;<br>
+&lt;body&gt;<br>
+   &lt;!-- Login/Register scherm --&gt;<br>
+   &lt;div id="authContainer" class="login-container"&gt;<br>
+       &lt;h1&gt;🌿 Hoveniersdesk&lt;/h1&gt;<br>
+       &lt;p class="subtitle"&gt;Klantbeheer voor hoveniersbedrijven&lt;/p&gt;<br>
+       <br>
+       &lt;div id="authMessage"&gt;&lt;/div&gt;<br>
+       <br>
+       &lt;form id="authForm" class="login-form"&gt;<br>
+           &lt;input type="email" id="authEmail" placeholder="E-mailadres" required&gt;<br>
+           &lt;input type="password" id="authPassword" placeholder="Wachtwoord" required&gt;<br>
+           &lt;button type="submit" id="authSubmitBtn"&gt;Inloggen&lt;/button&gt;<br>
+       &lt;/form&gt;<br>
+       <br>
+       &lt;div class="toggle-auth"&gt;<br>
+           &lt;span id="authToggleText"&gt;Nog geen account?&lt;/span&gt;<br>
+           &lt;a id="authToggleLink" onclick="toggleAuthMode()"&gt;Registreren&lt;/a&gt;<br>
+       &lt;/div&gt;<br>
+   &lt;/div&gt;</p>
+<p class="p1">   &lt;!-- Hoofd applicatie (verborgen tot ingelogd) --&gt;<br>
+   &lt;div id="appContainer" class="container hidden"&gt;<br>
+       &lt;header&gt;<br>
+           &lt;div class="header-left"&gt;<br>
+               &lt;h1&gt;Hoveniersdesk&lt;/h1&gt;<br>
+               &lt;p class="subtitle"&gt;Klantbeheer voor hoveniersbedrijven&lt;/p&gt;<br>
+           &lt;/div&gt;<br>
+           &lt;button class="logout-btn" onclick="uitloggen()"&gt;Uitloggen&lt;/button&gt;<br>
+       &lt;/header&gt;</p>
+<p class="p1">       &lt;div class="dashboard"&gt;<br>
+           &lt;div class="stat-kaart"&gt;<br>
+               &lt;div class="stat-label"&gt;Actieve Klanten&lt;/div&gt;<br>
+               &lt;div class="stat-waarde" id="actieveKlanten"&gt;0&lt;/div&gt;<br>
+           &lt;/div&gt;<br>
+           &lt;div class="stat-kaart"&gt;<br>
+               &lt;div class="stat-label"&gt;Week Omzet&lt;/div&gt;<br>
+               &lt;div class="stat-waarde" id="weekOmzet"&gt;€0&lt;/div&gt;<br>
+           &lt;/div&gt;<br>
+           &lt;div class="stat-kaart"&gt;<br>
+               &lt;div class="stat-label"&gt;Maand Verwacht&lt;/div&gt;<br>
+               &lt;div class="stat-waarde" id="maandVerwacht"&gt;€0&lt;/div&gt;<br>
+           &lt;/div&gt;<br>
+           &lt;div class="stat-kaart"&gt;<br>
+               &lt;div class="stat-label"&gt;Vandaag Afspraken&lt;/div&gt;<br>
+               &lt;div class="stat-waarde" id="vandaagAfspraken"&gt;0&lt;/div&gt;<br>
+           &lt;/div&gt;<br>
+       &lt;/div&gt;</p>
+<p class="p1">       &lt;div class="main-grid"&gt;<br>
+           &lt;aside class="klanten-lijst"&gt;<br>
+               &lt;h2&gt;Klanten&lt;/h2&gt;<br>
+               &lt;input type="text" class="zoek-input" id="zoekInput" placeholder="Zoek klant..."&gt;<br>
+               &lt;div id="klantenLijst"&gt;&lt;/div&gt;<br>
+               &lt;button class="nieuwe-klant-btn" onclick="nieuweKlant()"&gt;+ Nieuwe Klant&lt;/button&gt;<br>
+           &lt;/aside&gt;</p>
+<p class="p1">           &lt;main class="klant-detail" id="klantDetail"&gt;<br>
+               &lt;div class="placeholder-text"&gt;<br>
+                   Selecteer een klant of maak een nieuwe aan<br>
+               &lt;/div&gt;<br>
+           &lt;/main&gt;<br>
+       &lt;/div&gt;<br>
+   &lt;/div&gt;</p>
+<p class="p1">   &lt;script&gt;<br>
+       // ===== SUPABASE CONFIGURATIE =====<br>
+       // BELANGRIJK: Vervang deze waarden met je eigen Supabase project credentials<br>
+       const SUPABASE_URL = 'https://uveslrkluoskrqgpfqet.supabase.co'; // <br>
+       const SUPABASE_ANON_KEY = 'sb_publishable_CGDBuAT9zQF_NKmbl0y6xQ_jaNPuWC8';<br>
+       <br>
+       const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);</p>
+<p class="p1">       // ===== GLOBALE VARIABELEN =====<br>
+       let klanten = [];<br>
+       let huidigeKlantId = null;<br>
+       let huidigeGebruiker = null;<br>
+       let isLoginMode = true;</p>
+<p class="p1">       // ===== AUTHENTICATIE FUNCTIES =====<br>
+       <br>
+       // Check of gebruiker is ingelogd bij pagina laden<br>
+       async function checkAuth() {<br>
+           const { data: { user } } = await supabase.auth.getUser();<br>
+           <br>
+           if (user) {<br>
+               huidigeGebruiker = user;<br>
+               toonApp();<br>
+               await laadKlanten();<br>
+           } else {<br>
+               toonAuth();<br>
+           }<br>
+       }</p>
+<p class="p1">       // Login/Register form handler<br>
+       document.getElementById('authForm').addEventListener('submit', async (e) =&gt; {<br>
+           e.preventDefault();<br>
+           <br>
+           const email = document.getElementById('authEmail').value;<br>
+           const password = document.getElementById('authPassword').value;<br>
+           const submitBtn = document.getElementById('authSubmitBtn');<br>
+           <br>
+           submitBtn.disabled = true;<br>
+           submitBtn.textContent = isLoginMode ? 'Inloggen...' : 'Registreren...';<br>
+           <br>
+           try {<br>
+               let result;<br>
+               <br>
+               if (isLoginMode) {<br>
+                   // Inloggen<br>
+                   result = await supabase.auth.signInWithPassword({<br>
+                       email: email,<br>
+                       password: password<br>
+                   });<br>
+               } else {<br>
+                   // Registreren<br>
+                   result = await supabase.auth.signUp({<br>
+                       email: email,<br>
+                       password: password<br>
+                   });<br>
+               }<br>
+               <br>
+               if (result.error) throw result.error;<br>
+               <br>
+               if (!isLoginMode) {<br>
+                   toonBericht('Account aangemaakt! Check je email voor verificatie.', 'success');<br>
+                   setTimeout(() =&gt; {<br>
+                       isLoginMode = true;<br>
+                       toggleAuthMode();<br>
+                   }, 2000);<br>
+               } else {<br>
+                   huidigeGebruiker = result.data.user;<br>
+                   toonApp();<br>
+                   await laadKlanten();<br>
+               }<br>
+               <br>
+           } catch (error) {<br>
+               console.error('Auth error:', error);<br>
+               toonBericht(error.message || 'Er ging iets mis. Probeer opnieuw.', 'error');<br>
+           } finally {<br>
+               submitBtn.disabled = false;<br>
+               submitBtn.textContent = isLoginMode ? 'Inloggen' : 'Registreren';<br>
+           }<br>
+       });</p>
+<p class="p1">       function toggleAuthMode() {<br>
+           isLoginMode = !isLoginMode;<br>
+           <br>
+           const submitBtn = document.getElementById('authSubmitBtn');<br>
+           const toggleText = document.getElementById('authToggleText');<br>
+           const toggleLink = document.getElementById('authToggleLink');<br>
+           <br>
+           if (isLoginMode) {<br>
+               submitBtn.textContent = 'Inloggen';<br>
+               toggleText.textContent = 'Nog geen account?';<br>
+               toggleLink.textContent = 'Registreren';<br>
+           } else {<br>
+               submitBtn.textContent = 'Registreren';<br>
+               toggleText.textContent = 'Al een account?';<br>
+               toggleLink.textContent = 'Inloggen';<br>
+           }<br>
+           <br>
+           document.getElementById('authMessage').innerHTML = '';<br>
+       }</p>
+<p class="p1">       async function uitloggen() {<br>
+           await supabase.auth.signOut();<br>
+           huidigeGebruiker = null;<br>
+           klanten = [];<br>
+           toonAuth();<br>
+       }</p>
+<p class="p1">       function toonAuth() {<br>
+           document.getElementById('authContainer').classList.remove('hidden');<br>
+           document.getElementById('appContainer').classList.add('hidden');<br>
+       }</p>
+<p class="p1">       function toonApp() {<br>
+           document.getElementById('authContainer').classList.add('hidden');<br>
+           document.getElementById('appContainer').classList.remove('hidden');<br>
+       }</p>
+<p class="p1">       function toonBericht(tekst, type) {<br>
+           const messageDiv = document.getElementById('authMessage');<br>
+           messageDiv.innerHTML = `&lt;div class="${type}-message"&gt;${tekst}&lt;/div&gt;`;<br>
+       }</p>
+<p class="p1">       // ===== DATABASE FUNCTIES =====</p>
+<p class="p1">       async function laadKlanten() {<br>
+           try {<br>
+               const { data, error } = await supabase<br>
+                   .from('klanten')<br>
+                   .select('*')<br>
+                   .eq('user_id', huidigeGebruiker.id)<br>
+                   .order('naam');<br>
+               <br>
+               if (error) throw error;<br>
+               <br>
+               klanten = data || [];<br>
+               renderKlantenLijst();<br>
+               updateDashboard();<br>
+               <br>
+               if (klanten.length &gt; 0 &amp;&amp; !huidigeKlantId) {<br>
+                   toonKlant(klanten[0].id);<br>
+               }<br>
+           } catch (error) {<br>
+               console.error('Error loading klanten:', error);<br>
+               alert('Fout bij laden van klanten: ' + error.message);<br>
+           }<br>
+       }</p>
+<p class="p1">       async function opslaanKlant() {<br>
+           if (!huidigeKlantId) return;<br>
+           <br>
+           const klant = klanten.find(k =&gt; k.id === huidigeKlantId);<br>
+           if (!klant) return;<br>
+           <br>
+           try {<br>
+               const { error } = await supabase<br>
+                   .from('klanten')<br>
+                   .update({<br>
+                       naam: klant.naam,<br>
+                       adres: klant.adres,<br>
+                       telefoon: klant.telefoon,<br>
+                       email: klant.email,<br>
+                       tuintype: klant.tuintype,<br>
+                       tuingrootte: klant.tuingrootte,<br>
+                       grondsoort: klant.grondsoort,<br>
+                       opmerkingen: klant.opmerkingen,<br>
+                       onderhoud: klant.onderhoud,<br>
+                       prijs_per_bezoek: klant.prijsPerBezoek,<br>
+                       hekcode: klant.hekcode,<br>
+                       laatste_bezoek: klant.laatsteBezoek,<br>
+                       volgende_bezoek: klant.volgendeBezoek,<br>
+                       status: klant.status<br>
+                   })<br>
+                   .eq('id', huidigeKlantId);<br>
+               <br>
+               if (error) throw error;<br>
+               <br>
+               alert('✅ Klantgegevens opgeslagen!');<br>
+               await laadKlanten();<br>
+           } catch (error) {<br>
+               console.error('Error saving klant:', error);<br>
+               alert('Fout bij opslaan: ' + error.message);<br>
+           }<br>
+       }</p>
+<p class="p1">       async function nieuweKlant() {<br>
+           try {<br>
+               const { data, error } = await supabase<br>
+                   .from('klanten')<br>
+                   .insert({<br>
+                       user_id: huidigeGebruiker.id,<br>
+                       naam: "Nieuwe klant",<br>
+                       adres: "",<br>
+                       telefoon: "",<br>
+                       email: "",<br>
+                       tuintype: "achtertuin",<br>
+                       tuingrootte: 100,<br>
+                       grondsoort: "zand",<br>
+                       opmerkingen: "",<br>
+                       onderhoud: "maandelijks",<br>
+                       prijs_per_bezoek: 75,<br>
+                       hekcode: "",<br>
+                       laatste_bezoek: null,<br>
+                       volgende_bezoek: null,<br>
+                       status: "actief"<br>
+                   })<br>
+                   .select()<br>
+                   .single();<br>
+               <br>
+               if (error) throw error;<br>
+               <br>
+               await laadKlanten();<br>
+               toonKlant(data.id);<br>
+           } catch (error) {<br>
+               console.error('Error creating klant:', error);<br>
+               alert('Fout bij aanmaken klant: ' + error.message);<br>
+           }<br>
+       }</p>
+<p class="p1">       async function verwijderKlant(id) {<br>
+           if (!confirm('Weet je zeker dat je deze klant wilt verwijderen?')) return;<br>
+           <br>
+           try {<br>
+               const { error } = await supabase<br>
+                   .from('klanten')<br>
+                   .delete()<br>
+                   .eq('id', id);<br>
+               <br>
+               if (error) throw error;<br>
+               <br>
+               huidigeKlantId = null;<br>
+               document.getElementById('klantDetail').innerHTML = `<br>
+                   &lt;div class="placeholder-text"&gt;<br>
+                       Klant verwijderd. Selecteer een andere klant of maak een nieuwe aan.<br>
+                   &lt;/div&gt;<br>
+               `;<br>
+               <br>
+               await laadKlanten();<br>
+           } catch (error) {<br>
+               console.error('Error deleting klant:', error);<br>
+               alert('Fout bij verwijderen: ' + error.message);<br>
+           }<br>
+       }</p>
+<p class="p1">       // ===== UI FUNCTIES =====</p>
+<p class="p1">       function updateDashboard() {<br>
+           const actief = klanten.filter(k =&gt; k.status === 'actief').length;<br>
+           document.getElementById('actieveKlanten').textContent = actief;</p>
+<p class="p1">           const vandaag = new Date();<br>
+           const weekStart = new Date(vandaag);<br>
+           weekStart.setDate(vandaag.getDate() - vandaag.getDay());<br>
+           const weekEind = new Date(weekStart);<br>
+           weekEind.setDate(weekStart.getDate() + 7);</p>
+<p class="p1">           let weekOmzet = 0;<br>
+           let vandaagAfspraken = 0;</p>
+<p class="p1">           klanten.forEach(k =&gt; {<br>
+               if (k.volgende_bezoek) {<br>
+                   const bezoekDatum = new Date(k.volgende_bezoek);<br>
+                   if (bezoekDatum &gt;= weekStart &amp;&amp; bezoekDatum &lt; weekEind) {<br>
+                       weekOmzet += parseFloat(k.prijs_per_bezoek || 0);<br>
+                   }<br>
+                   if (bezoekDatum.toDateString() === vandaag.toDateString()) {<br>
+                       vandaagAfspraken++;<br>
+                   }<br>
+               }<br>
+           });</p>
+<p class="p1">           document.getElementById('weekOmzet').textContent = `€${weekOmzet.toFixed(0)}`;<br>
+           document.getElementById('vandaagAfspraken').textContent = vandaagAfspraken;</p>
+<p class="p1">           let maandVerwacht = 0;<br>
+           klanten.forEach(k =&gt; {<br>
+               if (k.status === 'actief' &amp;&amp; k.onderhoud) {<br>
+                   const prijs = parseFloat(k.prijs_per_bezoek || 0);<br>
+                   switch(k.onderhoud) {<br>
+                       case 'wekelijks':<br>
+                           maandVerwacht += prijs * 4;<br>
+                           break;<br>
+                       case 'tweewekelijks':<br>
+                           maandVerwacht += prijs * 2;<br>
+                           break;<br>
+                       case 'maandelijks':<br>
+                           maandVerwacht += prijs;<br>
+                           break;<br>
+                   }<br>
+               }<br>
+           });</p>
+<p class="p1">           document.getElementById('maandVerwacht').textContent = `€${maandVerwacht.toFixed(0)}`;<br>
+       }</p>
+<p class="p1">       function renderKlantenLijst(filter = '') {<br>
+           const lijst = document.getElementById('klantenLijst');<br>
+           const gefilterd = klanten.filter(k =&gt; <br>
+               k.naam.toLowerCase().includes(filter.toLowerCase()) ||<br>
+               k.adres.toLowerCase().includes(filter.toLowerCase())<br>
+           );</p>
+<p class="p1">           lijst.innerHTML = gefilterd.map(klant =&gt; `<br>
+               &lt;div class="klant-item ${klant.id === huidigeKlantId ? 'actief' : ''}" onclick="toonKlant(${klant.id})"&gt;<br>
+                   &lt;div class="klant-naam"&gt;${klant.naam}&lt;/div&gt;<br>
+                   &lt;div class="klant-info"&gt;${klant.adres}&lt;/div&gt;<br>
+                   &lt;div class="klant-info"&gt;📏 ${klant.tuingrootte}m² • ${klant.tuintype}&lt;/div&gt;<br>
+               &lt;/div&gt;<br>
+           `).join('');<br>
+       }</p>
+<p class="p1">       function toonKlant(id) {<br>
+           huidigeKlantId = id;<br>
+           const klant = klanten.find(k =&gt; k.id === id);<br>
+           <br>
+           const detail = document.getElementById('klantDetail');<br>
+           detail.innerHTML = `<br>
+               &lt;h2&gt;${klant.naam} &lt;span class="status-badge status-${klant.status}"&gt;${klant.status}&lt;/span&gt;&lt;/h2&gt;<br>
+               <br>
+               &lt;div class="sectie"&gt;<br>
+                   &lt;h3&gt;📍 Contactgegevens&lt;/h3&gt;<br>
+                   &lt;div class="form-grid"&gt;<br>
+                       &lt;div class="form-groep"&gt;<br>
+                           &lt;label&gt;&lt;span class="label-icon"&gt;👤&lt;/span&gt; Naam&lt;/label&gt;<br>
+                           &lt;input type="text" value="${klant.naam}" onchange="updateKlant(${id}, 'naam', this.value)"&gt;<br>
+                       &lt;/div&gt;<br>
+                       &lt;div class="form-groep"&gt;<br>
+                           &lt;label&gt;&lt;span class="label-icon"&gt;📞&lt;/span&gt; Telefoon&lt;/label&gt;<br>
+                           &lt;input type="tel" value="${klant.telefoon || ''}" onchange="updateKlant(${id}, 'telefoon', this.value)"&gt;<br>
+                       &lt;/div&gt;<br>
+                       &lt;div class="form-groep"&gt;<br>
+                           &lt;label&gt;&lt;span class="label-icon"&gt;🏠&lt;/span&gt; Adres&lt;/label&gt;<br>
+                           &lt;input type="text" value="${klant.adres || ''}" onchange="updateKlant(${id}, 'adres', this.value)"&gt;<br>
+                       &lt;/div&gt;<br>
+                       &lt;div class="form-groep"&gt;<br>
+                           &lt;label&gt;&lt;span class="label-icon"&gt;✉️&lt;/span&gt; Email&lt;/label&gt;<br>
+                           &lt;input type="email" value="${klant.email || ''}" onchange="updateKlant(${id}, 'email', this.value)"&gt;<br>
+                       &lt;/div&gt;<br>
+                   &lt;/div&gt;<br>
+               &lt;/div&gt;</p>
+<p class="p1">               &lt;div class="sectie"&gt;<br>
+                   &lt;h3&gt;🌳 Tuininformatie&lt;/h3&gt;<br>
+                   &lt;div class="form-grid"&gt;<br>
+                       &lt;div class="form-groep"&gt;<br>
+                           &lt;label&gt;&lt;span class="label-icon"&gt;🏡&lt;/span&gt; Type tuin&lt;/label&gt;<br>
+                           &lt;select onchange="updateKlant(${id}, 'tuintype', this.value)"&gt;<br>
+                               &lt;option value="voortuin" ${klant.tuintype === 'voortuin' ? 'selected' : ''}&gt;Voortuin&lt;/option&gt;<br>
+                               &lt;option value="achtertuin" ${klant.tuintype === 'achtertuin' ? 'selected' : ''}&gt;Achtertuin&lt;/option&gt;<br>
+                               &lt;option value="zijgevel" ${klant.tuintype === 'zijgevel' ? 'selected' : ''}&gt;Zijgevel&lt;/option&gt;<br>
+                               &lt;option value="daktuin" ${klant.tuintype === 'daktuin' ? 'selected' : ''}&gt;Daktuin&lt;/option&gt;<br>
+                           &lt;/select&gt;<br>
+                       &lt;/div&gt;<br>
+                       &lt;div class="form-groep"&gt;<br>
+                           &lt;label&gt;&lt;span class="label-icon"&gt;📏&lt;/span&gt; Oppervlakte (m²)&lt;/label&gt;<br>
+                           &lt;input type="number" value="${klant.tuingrootte}" onchange="updateKlant(${id}, 'tuingrootte', this.value)"&gt;<br>
+                       &lt;/div&gt;<br>
+                       &lt;div class="form-groep"&gt;<br>
+                           &lt;label&gt;&lt;span class="label-icon"&gt;🌍&lt;/span&gt; Grondsoort&lt;/label&gt;<br>
+                           &lt;select onchange="updateKlant(${id}, 'grondsoort', this.value)"&gt;<br>
+                               &lt;option value="zand" ${klant.grondsoort === 'zand' ? 'selected' : ''}&gt;Zand&lt;/option&gt;<br>
+                               &lt;option value="klei" ${klant.grondsoort === 'klei' ? 'selected' : ''}&gt;Klei&lt;/option&gt;<br>
+                               &lt;option value="leem" ${klant.grondsoort === 'leem' ? 'selected' : ''}&gt;Leem&lt;/option&gt;<br>
+                               &lt;option value="veen" ${klant.grondsoort === 'veen' ? 'selected' : ''}&gt;Veen&lt;/option&gt;<br>
+                           &lt;/select&gt;<br>
+                       &lt;/div&gt;<br>
+                       &lt;div class="form-groep"&gt;<br>
+                           &lt;label&gt;&lt;span class="label-icon"&gt;🔧&lt;/span&gt; Onderhoudsfrequentie&lt;/label&gt;<br>
+                           &lt;select onchange="updateKlant(${id}, 'onderhoud', this.value)"&gt;<br>
+                               &lt;option value="wekelijks" ${klant.onderhoud === 'wekelijks' ? 'selected' : ''}&gt;Wekelijks&lt;/option&gt;<br>
+                               &lt;option value="tweewekelijks" ${klant.onderhoud === 'tweewekelijks' ? 'selected' : ''}&gt;Tweewekelijks&lt;/option&gt;<br>
+                               &lt;option value="maandelijks" ${klant.onderhoud === 'maandelijks' ? 'selected' : ''}&gt;Maandelijks&lt;/option&gt;<br>
+                               &lt;option value="per-seizoen" ${klant.onderhoud === 'per-seizoen' ? 'selected' : ''}&gt;Per seizoen&lt;/option&gt;<br>
+                               &lt;option value="incidenteel" ${klant.onderhoud === 'incidenteel' ? 'selected' : ''}&gt;Incidenteel&lt;/option&gt;<br>
+                           &lt;/select&gt;<br>
+                       &lt;/div&gt;<br>
+                       &lt;div class="form-groep"&gt;<br>
+                           &lt;label&gt;&lt;span class="label-icon"&gt;💰&lt;/span&gt; Prijs per bezoek (€)&lt;/label&gt;<br>
+                           &lt;input type="number" value="${klant.prijs_per_bezoek}" onchange="updateKlant(${id}, 'prijsPerBezoek', this.value)"&gt;<br>
+                       &lt;/div&gt;<br>
+                       &lt;div class="form-groep"&gt;<br>
+                           &lt;label&gt;&lt;span class="label-icon"&gt;🔐&lt;/span&gt; Hekcode (optioneel)&lt;/label&gt;<br>
+                           &lt;input type="text" value="${klant.hekcode || ''}" placeholder="Bijv. 1234" onchange="updateKlant(${id}, 'hekcode', this.value)"&gt;<br>
+                       &lt;/div&gt;<br>
+                   &lt;/div&gt;<br>
+               &lt;/div&gt;</p>
+<p class="p1">               &lt;div class="sectie"&gt;<br>
+                   &lt;h3&gt;📝 Notities &amp; bijzonderheden&lt;/h3&gt;<br>
+                   &lt;div class="form-grid full"&gt;<br>
+                       &lt;div class="form-groep"&gt;<br>
+                           &lt;label&gt;&lt;span class="label-icon"&gt;💬&lt;/span&gt; Opmerkingen&lt;/label&gt;<br>
+                           &lt;textarea onchange="updateKlant(${id}, 'opmerkingen', this.value)"&gt;${klant.opmerkingen || ''}&lt;/textarea&gt;<br>
+                       &lt;/div&gt;<br>
+                   &lt;/div&gt;<br>
+                   &lt;div class="form-grid"&gt;<br>
+                       &lt;div class="form-groep"&gt;<br>
+                           &lt;label&gt;&lt;span class="label-icon"&gt;📅&lt;/span&gt; Laatste bezoek&lt;/label&gt;<br>
+                           &lt;input type="date" value="${klant.laatste_bezoek || ''}" onchange="updateKlant(${id}, 'laatsteBezoek', this.value)"&gt;<br>
+                       &lt;/div&gt;<br>
+                       &lt;div class="form-groep"&gt;<br>
+                           &lt;label&gt;&lt;span class="label-icon"&gt;🗓️&lt;/span&gt; Volgend bezoek&lt;/label&gt;<br>
+                           &lt;input type="date" value="${klant.volgende_bezoek || ''}" onchange="updateKlant(${id}, 'volgendeBezoek', this.value)"&gt;<br>
+                       &lt;/div&gt;<br>
+                   &lt;/div&gt;<br>
+               &lt;/div&gt;</p>
+<p class="p1">               &lt;div class="actie-knoppen"&gt;<br>
+                   &lt;button class="btn btn-primair" onclick="opslaanKlant()"&gt;💾 Opslaan&lt;/button&gt;<br>
+                   &lt;button class="btn btn-secundair" onclick="verwijderKlant(${id})"&gt;🗑️ Verwijderen&lt;/button&gt;<br>
+               &lt;/div&gt;<br>
+           `;</p>
+<p class="p1">           renderKlantenLijst(document.getElementById('zoekInput').value);<br>
+       }</p>
+<p class="p1">       function updateKlant(id, veld, waarde) {<br>
+           const klant = klanten.find(k =&gt; k.id === id);<br>
+           if (klant) {<br>
+               // Map frontend veldnamen naar database kolomnamen<br>
+               const veldMapping = {<br>
+                   'prijsPerBezoek': 'prijs_per_bezoek',<br>
+                   'laatsteBezoek': 'laatste_bezoek',<br>
+                   'volgendeBezoek': 'volgende_bezoek'<br>
+               };<br>
+               <br>
+               const dbVeld = veldMapping[veld] || veld;<br>
+               klant[dbVeld] = waarde;<br>
+               <br>
+               renderKlantenLijst(document.getElementById('zoekInput').value);<br>
+           }<br>
+       }</p>
+<p class="p1">       document.getElementById('zoekInput').addEventListener('input', (e) =&gt; {<br>
+           renderKlantenLijst(e.target.value);<br>
+       });</p>
+<p class="p1">       // Start de app<br>
+       checkAuth();<br>
+   &lt;/script&gt;<br>
+&lt;/body&gt;<br>
+&lt;/html&gt;</p>
+</body>
+</html>
